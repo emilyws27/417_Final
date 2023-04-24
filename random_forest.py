@@ -1,9 +1,11 @@
-import pandas as pd
 import numpy as np
-from sklearn.model_selection import train_test_split
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.metrics import classification_report, accuracy_score
+import pandas as pd
+from sklearn.model_selection import train_test_split, GridSearchCV
+from sklearn.svm import SVC
+from sklearn.preprocessing import StandardScaler
+from sklearn.metrics import classification_report, accuracy_score, confusion_matrix
 from sklearn.model_selection import GridSearchCV
+from sklearn.ensemble import RandomForestClassifier
 
 data = pd.read_csv('winequality-red.csv', delimiter=';')
 
@@ -27,6 +29,14 @@ grid_search.fit(X_train, y_train)
 best_rf = grid_search.best_estimator_
 
 y_pred = best_rf.predict(X_test)
-print("Accuracy:", accuracy_score(y_test, y_pred))
-print(classification_report(y_test, y_pred))
+
+accuracy = accuracy_score(y_test, y_pred)
+report = classification_report(y_test, y_pred)
+
+with open('results.txt', 'w') as f:
+    f.write("=====================RANDOM FOREST CLASSIFIER=====================\n")
+    f.write('Accuracy: ')
+    f.write(str(accuracy))
+    f.write('\nClassification Report: \n')
+    f.write((report))
 
